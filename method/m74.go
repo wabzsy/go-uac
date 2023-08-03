@@ -76,7 +76,7 @@ func RunTaskService(path, name, xmlText string) error {
 		// 存在则: 停止任务, 删除任务, 创建任务
 		log.Println("任务已存在")
 		registeredTask, hr = taskFolder.GetTask(bstrName)
-		if hr.IsSuccesed() {
+		if hr.IsSucceed() {
 			log.Println("已找到任务")
 			hr = registeredTask.Stop(0)
 			log.Println("停止任务:", hr)
@@ -106,7 +106,7 @@ func RunTaskService(path, name, xmlText string) error {
 
 	state, hr := runningTask.GetState()
 
-	if hr.IsSuccesed() && state == ole.TASK_STATE_RUNNING {
+	if hr.IsSucceed() && state == ole.TASK_STATE_RUNNING {
 		log.Println("任务启动成功")
 		log.Println("10秒后停止并清理任务")
 		time.Sleep(time.Second * 10)

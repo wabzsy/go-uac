@@ -4,7 +4,7 @@ import "syscall"
 
 type HResult int32
 
-func (e HResult) IsSuccesed() bool {
+func (e HResult) IsSucceed() bool {
 	return e >= 0
 }
 

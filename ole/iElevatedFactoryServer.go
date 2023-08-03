@@ -11,6 +11,7 @@ var (
 )
 
 /*
+IElevatedFactoryServer
 [Guid("804bd226-af47-4d71-b492-443a57610b08")]
 
 	interface IElevatedFactoryServer : IUnknown {
@@ -26,14 +27,14 @@ type IElevatedFactoryServerVtbl struct {
 	ServerCreateElevatedObject uintptr
 }
 
-func (x *IElevatedFactoryServer[T]) ServerCreateElevatedObject(clsid, iid *GUID) (unk T, hr HResult) {
+func (v *IElevatedFactoryServer[T]) ServerCreateElevatedObject(clsid, iid *GUID) (unk T, hr HResult) {
 	if iid == nil {
 		iid = IID_IUnknown
 	}
 
 	r1, _, _ := syscall.SyscallN(
-		x.VTable().ServerCreateElevatedObject,
-		uintptr(unsafe.Pointer(x)),
+		v.VTable().ServerCreateElevatedObject,
+		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(clsid)),
 		uintptr(unsafe.Pointer(iid)),
 		uintptr(unsafe.Pointer(&unk)),

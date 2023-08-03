@@ -11,6 +11,7 @@ var (
 )
 
 /*
+ICMLuaUtil
 [Guid("6edd6d74-c007-4e75-b76a-e5740995e24c")]
 
 	interface ICMLuaUtil : IUnknown {
@@ -39,19 +40,19 @@ type ICMLuaUtil struct {
 
 type ICMLuaUtilVtbl struct {
 	IUnknownVtbl
-	Proc3     uintptr
-	Proc4     uintptr
-	Proc5     uintptr
-	Proc6     uintptr
-	Proc7     uintptr
-	Proc8     uintptr
-	ShellExec uintptr
+	SetRasCredentials     uintptr
+	SetRasEntryProperties uintptr
+	DeleteRasEntry        uintptr
+	LaunchInfSection      uintptr
+	LaunchInfSectionEx    uintptr
+	CreateLayerDirectory  uintptr
+	ShellExec             uintptr
 }
 
-func (x *ICMLuaUtil) ShellExec(lpFile, lpParameters, lpDirectory *uint16, fMask, nShow uint32) (hr error) {
+func (v *ICMLuaUtil) ShellExec(lpFile, lpParameters, lpDirectory *uint16, fMask, nShow uint32) (hr error) {
 	r1, _, _ := syscall.SyscallN(
-		x.VTable().ShellExec,
-		uintptr(unsafe.Pointer(x)),
+		v.VTable().ShellExec,
+		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(lpFile)),
 		uintptr(unsafe.Pointer(lpParameters)),
 		uintptr(unsafe.Pointer(lpDirectory)),

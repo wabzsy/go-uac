@@ -11,18 +11,19 @@ var (
 )
 
 /*
+ITaskService
 [Guid("2faba4c7-4da9-4013-9697-20cc3fd40f85")]
 
 	interface ITaskService : IDispatch {
-	    HRESULT Proc7( [In] BSTR p0,  [Out] ITaskFolder** p1);
-	    HRESULT Proc8( [In] int p0,  [Out] IRunningTaskCollection** p1);
-	    HRESULT Proc9( [In] int p0,  [Out]  IUnknown** p1);
-	    HRESULT Proc10( [In] VARIANT* p0,  [In] VARIANT* p1,  [In] VARIANT* p2,  [In] VARIANT* p3);
-	    HRESULT Proc11( [Out] short* p0);
-	    HRESULT Proc12( [Out] BSTR* p0);
-	    HRESULT Proc13( [Out] BSTR* p0);
-	    HRESULT Proc14( [Out] BSTR* p0);
-	    HRESULT Proc15( [Out] int* p0);
+		HRESULT Proc7( [In] BSTR p0,  [Out] ITaskFolder** p1);
+		HRESULT Proc8( [In] int p0,  [Out] IRunningTaskCollection** p1);
+		HRESULT Proc9( [In] int p0,  [Out]  IUnknown** p1);
+		HRESULT Proc10( [In] VARIANT* p0,  [In] VARIANT* p1,  [In] VARIANT* p2,  [In] VARIANT* p3);
+		HRESULT Proc11( [Out] short* p0);
+		HRESULT Proc12( [Out] BSTR* p0);
+		HRESULT Proc13( [Out] BSTR* p0);
+		HRESULT Proc14( [Out] BSTR* p0);
+		HRESULT Proc15( [Out] int* p0);
 	}
 */
 type ITaskService struct {
@@ -73,6 +74,7 @@ func (v *ITaskService) GetFolder(path *uint16) (taskFolder *ITaskFolder, hr HRes
 }
 
 /*
+ITaskFolder
 [Guid("8cfac062-a080-4c15-9a88-aa7c2af80dfc")]
 
 	interface ITaskFolder : IDispatch {
@@ -163,6 +165,7 @@ func (v *ITaskFolder) RegisterTask(
 }
 
 /*
+IRegisteredTask
 [Guid("9c86f320-dee3-4dd1-b972-a303f26b061e")]
 
 	interface IRegisteredTask : IDispatch {
@@ -238,6 +241,7 @@ func (v *IRegisteredTask) Stop(flags int32) (hr HResult) {
 }
 
 /*
+IRunningTask
 [Guid("653758fb-7b9a-4f1e-a471-beeb8e9b834e")]
 
 	interface IRunningTask : IDispatch {
