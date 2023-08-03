@@ -6,7 +6,6 @@ package main
 import (
 	"fmt"
 	"go-uac/method"
-	"go-uac/ole"
 	"log"
 )
 
@@ -15,8 +14,6 @@ func main() {
 		fmt.Println("Press [Enter] to exit.")
 		_, _ = fmt.Scanln()
 	}()
-
-	fmt.Println("", ole.CLSID_CMSTPLUA.String())
 
 	if err := method.RunICMLuaUtil("C:\\windows\\system32\\cmd.exe"); err != nil {
 		log.Println(err)
