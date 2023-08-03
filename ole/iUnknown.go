@@ -5,6 +5,12 @@ import (
 	"unsafe"
 )
 
+type UnknownLike interface {
+	QueryInterface(iid *GUID) (disp *IDispatch, hr HResult)
+	AddRef() HResult
+	Release() HResult
+}
+
 type IUnknown struct {
 	RawVTable *interface{}
 }
@@ -13,12 +19,6 @@ type IUnknownVtbl struct {
 	QueryInterface uintptr
 	AddRef         uintptr
 	Release        uintptr
-}
-
-type UnknownLike interface {
-	QueryInterface(iid *GUID) (disp *IDispatch, hr HResult)
-	AddRef() HResult
-	Release() HResult
 }
 
 func (v *IUnknown) VTable() *IUnknownVtbl {

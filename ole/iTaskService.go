@@ -5,6 +5,30 @@ import (
 	"unsafe"
 )
 
+var (
+	CLSID_TaskScheduler = NewGUID("{0F87369F-A4E5-4CFC-BD3E-73E6154572DD}")
+	IID_ITaskService    = NewGUID("{2FABA4C7-4DA9-4013-9697-20CC3FD40F85}")
+)
+
+/*
+[Guid("2faba4c7-4da9-4013-9697-20cc3fd40f85")]
+
+	interface ITaskService : IDispatch {
+	    HRESULT Proc7( [In] BSTR p0,  [Out] ITaskFolder** p1);
+	    HRESULT Proc8( [In] int p0,  [Out] IRunningTaskCollection** p1);
+	    HRESULT Proc9( [In] int p0,  [Out]  IUnknown** p1);
+	    HRESULT Proc10( [In] VARIANT* p0,  [In] VARIANT* p1,  [In] VARIANT* p2,  [In] VARIANT* p3);
+	    HRESULT Proc11( [Out] short* p0);
+	    HRESULT Proc12( [Out] BSTR* p0);
+	    HRESULT Proc13( [Out] BSTR* p0);
+	    HRESULT Proc14( [Out] BSTR* p0);
+	    HRESULT Proc15( [Out] int* p0);
+	}
+*/
+type ITaskService struct {
+	IDispatch
+}
+
 type ITaskServiceVtbl struct {
 	IDispatchVtbl
 	GetFolder           uintptr
@@ -18,12 +42,6 @@ type ITaskServiceVtbl struct {
 	get_HighestVersion  uintptr
 }
 
-// [Guid("2faba4c7-4da9-4013-9697-20cc3fd40f85")]
-type ITaskService struct {
-	IDispatch
-}
-
-// Proc10
 func (v *ITaskService) Connect(serverName, user, domain, password VARIANT) (hr HResult) {
 	r1, _, _ := syscall.SyscallN(
 		v.VTable().Connect,
@@ -77,6 +95,23 @@ type ITaskFolder struct {
 	IDispatch
 }
 
+type ITaskFolderVtbl struct {
+	IDispatchVtbl
+	get_Name               uintptr
+	get_Path               uintptr
+	GetFolder              uintptr
+	GetFolders             uintptr
+	CreateFolder           uintptr
+	DeleteFolder           uintptr
+	GetTask                uintptr
+	GetTasks               uintptr
+	DeleteTask             uintptr
+	RegisterTask           uintptr
+	RegisterTaskDefinition uintptr
+	GetSecurityDescriptor  uintptr
+	SetSecurityDescriptor  uintptr
+}
+
 func (v *ITaskFolder) VTable() *ITaskFolderVtbl {
 	return (*ITaskFolderVtbl)(unsafe.Pointer(v.RawVTable))
 }
@@ -127,23 +162,6 @@ func (v *ITaskFolder) RegisterTask(
 	return
 }
 
-type ITaskFolderVtbl struct {
-	IDispatchVtbl
-	get_Name               uintptr
-	get_Path               uintptr
-	GetFolder              uintptr
-	GetFolders             uintptr
-	CreateFolder           uintptr
-	DeleteFolder           uintptr
-	GetTask                uintptr
-	GetTasks               uintptr
-	DeleteTask             uintptr
-	RegisterTask           uintptr
-	RegisterTaskDefinition uintptr
-	GetSecurityDescriptor  uintptr
-	SetSecurityDescriptor  uintptr
-}
-
 /*
 [Guid("9c86f320-dee3-4dd1-b972-a303f26b061e")]
 
@@ -172,6 +190,28 @@ type IRegisteredTask struct {
 	IDispatch
 }
 
+type IRegisteredTaskVtbl struct {
+	IDispatchVtbl
+	get_Name               uintptr
+	get_Path               uintptr
+	get_State              uintptr
+	get_Enabled            uintptr
+	set_Enabled            uintptr
+	Run                    uintptr
+	RunEx                  uintptr
+	GetInstances           uintptr
+	get_LastRunTime        uintptr
+	get_LastTaskResult     uintptr
+	get_NumberOfMissedRuns uintptr
+	get_NextRunTime        uintptr
+	get_Definition         uintptr
+	get_Xml                uintptr
+	GetSecurityDescriptor  uintptr
+	SetSecurityDescriptor  uintptr
+	Stop                   uintptr
+	GetRunTimes            uintptr
+}
+
 func (v *IRegisteredTask) VTable() *IRegisteredTaskVtbl {
 	return (*IRegisteredTaskVtbl)(unsafe.Pointer(v.RawVTable))
 }
@@ -197,28 +237,6 @@ func (v *IRegisteredTask) Stop(flags int32) (hr HResult) {
 	return
 }
 
-type IRegisteredTaskVtbl struct {
-	IDispatchVtbl
-	get_Name               uintptr
-	get_Path               uintptr
-	get_State              uintptr
-	get_Enabled            uintptr
-	set_Enabled            uintptr
-	Run                    uintptr
-	RunEx                  uintptr
-	GetInstances           uintptr
-	get_LastRunTime        uintptr
-	get_LastTaskResult     uintptr
-	get_NumberOfMissedRuns uintptr
-	get_NextRunTime        uintptr
-	get_Definition         uintptr
-	get_Xml                uintptr
-	GetSecurityDescriptor  uintptr
-	SetSecurityDescriptor  uintptr
-	Stop                   uintptr
-	GetRunTimes            uintptr
-}
-
 /*
 [Guid("653758fb-7b9a-4f1e-a471-beeb8e9b834e")]
 
@@ -235,6 +253,18 @@ type IRegisteredTaskVtbl struct {
 */
 type IRunningTask struct {
 	IDispatch
+}
+
+type IRunningTaskVtbl struct {
+	IDispatchVtbl
+	get_Name          uintptr
+	get_InstanceGuid  uintptr
+	get_Path          uintptr
+	get_State         uintptr
+	get_CurrentAction uintptr
+	Stop              uintptr
+	Refresh           uintptr
+	get_EnginePID     uintptr
 }
 
 func (v *IRunningTask) VTable() *IRunningTaskVtbl {
@@ -258,18 +288,6 @@ func (v *IRunningTask) Stop() (hr HResult) {
 	)
 	hr = HResult(r1)
 	return
-}
-
-type IRunningTaskVtbl struct {
-	IDispatchVtbl
-	get_Name          uintptr
-	get_InstanceGuid  uintptr
-	get_Path          uintptr
-	get_State         uintptr
-	get_CurrentAction uintptr
-	Stop              uintptr
-	Refresh           uintptr
-	get_EnginePID     uintptr
 }
 
 type TaskState int

