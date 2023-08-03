@@ -1,0 +1,4 @@
+https://learn.microsoft.com/zh-cn/windows/win32/learnwin32/creating-an-object-in-com
+https://learn.microsoft.com/zh-cn/windows/win32/com/the-com-elevation-moniker
+
+TODO: 进程伪装
